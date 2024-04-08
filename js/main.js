@@ -1,78 +1,33 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const postSpawner = document.getElementById('js--posts');
+document.addEventListener("DOMContentLoaded", function () {
+    const postsContainer = document.getElementById('js--posts');
 
-    // Dummy-gegevens voor testdoeleinden
-    const dummyPosts = [
-        {
-            user: 'John Doe',
-            content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ut tellus eget tortor consectetur vehicula.',
-            date: '2023-03-15'
-        },
-        {
-            user: 'Jane Smith',
-            content: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.',
-            date: '2023-03-16'
-        },
-        {
-            user: 'Alice Johnson',
-            content: 'Fusce eu tellus sit amet ex maximus sollicitudin a a purus. Integer lacinia vestibulum justo eget elementum.',
-            date: '2023-03-17'
-        }
-    ];
+    async function fetchAndDisplayPosts() {
+        try {
+            const response = await fetch('json/socialPosts.json');
+            const data = await response.json();
 
-
-    const postsPerLoad = 5;
-
-    function addDummyPosts() {
-        for (let i = 0; i < postsPerLoad; i++) {
-            const postIndex = Math.floor(Math.random() * dummyPosts.length);
-            const postElement = createPostElement(dummyPosts[postIndex]);
-            postSpawner.appendChild(postElement);
+            data.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.classList.add('post');
+                postElement.innerHTML = `
+                    <h2>${post.user}</h2>
+                    <p>${post.content}</p>
+                    <span>${post.date}</span>
+                `;
+                postsContainer.appendChild(postElement);
+            });
+        } catch (error) {
+            console.error('Error fetching posts:', error);
         }
     }
 
-
-    function createPostElement(postData) {
-        const postElement = document.createElement('div');
-        postElement.classList.add('post');
-
-   
-        const userElement = document.createElement('div');
-        userElement.classList.add('postUser');
-        userElement.textContent = postData.user;
-        postElement.appendChild(userElement);
-
-     
-        const contentElement = document.createElement('div');
-        contentElement.classList.add('postContent');
-        contentElement.textContent = postData.content;
-        postElement.appendChild(contentElement);
-
-      
-        const dateElement = document.createElement('div');
-        dateElement.classList.add('postDate');
-        dateElement.textContent = formatDate(postData.date);
-        postElement.appendChild(dateElement);
-
-        return postElement;
-    }
-
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return date.toLocaleDateString('en-US', options);
-    }
-
-    function isAtBottom() {
-        return window.innerHeight + window.scrollY >= document.body.offsetHeight;
-    }
-
- 
-    window.addEventListener('scroll', function () {
-        if (isAtBottom()) {
-            addDummyPosts();
+    function loadMorePostsIfNeeded() {
+        const lastPost = postsContainer.lastElementChild;
+        const lastPostRect = lastPost.getBoundingClientRect();
+        if (lastPostRect.bottom <= window.innerHeight) {
+            fetchAndDisplayPosts();
         }
-    });
-
-    addDummyPosts();
+    }
+    fetchAndDisplayPosts();
+    window.addEventListener('scroll', loadMorePostsIfNeeded);
 });

@@ -10,23 +10,28 @@ html {
     font-size: 62.5%;
 }
 
-.body {
+body {
     font-size: 2rem;
+    background: rgb(133,118,255);
+    background: linear-gradient(90deg, rgba(133,118,255,1) 0%, rgba(123,201,255,1) 98%);
 }
 
 .socialHeader {
-    background: rgb(84, 82, 82);
+    background: rgb(28,22,120);
+    background: linear-gradient(90deg, rgba(28,22,120,1) 0%,  rgb(13, 9, 75) 98%);
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 5rem;
+    height: 10rem;
+    text-decoration: none;
+    margin-bottom: 2rem;
 }
 
-.navItems {
-    color: white;
+.navItems a {
+    color: rgb(122, 119, 119);
     text-decoration: none;
     font-size:3rem;
-    gap:2rem;
+    padding:10rem;
 }
 
 
@@ -39,9 +44,9 @@ html {
     flex-direction: column;
     padding:2rem;
     gap:0.5rem;
-    border: 0.1rem solid black;
-  
-    
+    border: 0.3rem solid black;
+    color:white;
+    padding-bottom: 1rem;
 }
 
 
